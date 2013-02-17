@@ -7,4 +7,5 @@ package structure.tree;
 public interface Tree<T extends Comparable<T>> {
     void insert(T element);
     void remove(T element);
+    boolean exists(T element);
 }

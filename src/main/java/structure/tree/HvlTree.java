@@ -1,17 +1,19 @@
 package structure.tree;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Created by: Josh
  * On: 2/16/13 10:09 PM
  */
-public class HvlTree<T extends Comparable<T>> implements Tree<T>{
+public class HvlTree<T extends Comparable<T>> implements Tree<T> {
     private int allowedImbalance;   //How much imbalance is allowed.
     private HvlNode<T> root;        //The base of the tree.
 
     /*
      * Constructor - specify the allowed imbalance.
      */
-    HvlTree(int allowedImbalance) {
+    public HvlTree(int allowedImbalance) {
         if (allowedImbalance > 0)
             this.allowedImbalance = allowedImbalance;
         else
@@ -22,13 +24,35 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T>{
      * Inserts the passed element into the root.
      */
     @Override
-    public void insert(T element){
-        insert(element, root);
+    public void insert(T element) {
+        root = insert(element, root);
     }
 
     @Override
-    public void remove(T element){
-        remove(element, root);
+    public void remove(T element) {
+        root = remove(element, root);
+    }
+
+    @Override
+    public boolean exists(T element) {
+        return exists(element, root);
+    }
+
+    @Override
+    public String toString() {
+        return toString(root, 0, "---");
+    }
+
+    private String toString(HvlNode<T> node, int prefixTabs, String prefix) {
+        StringBuffer printed = new StringBuffer();
+
+        if (node != null) {
+            printed.append(toString(node.right, prefixTabs + 1, "/-- "));
+            printed.append(StringUtils.repeat("    ", prefixTabs)).append(prefix).append(node.element).append("\n");
+            printed.append(toString(node.left, prefixTabs + 1, "\\-- "));
+        }
+
+        return printed.toString();
     }
 
     private HvlNode<T> insert(T element, HvlNode<T> node) {
@@ -83,6 +107,23 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T>{
         }
 
         return balance(node);
+    }
+
+    private boolean exists(T element, HvlNode<T> node) {
+        //Did not find it - reached a null leaf.
+        if (node == null)
+            return false;
+
+        int compareResult = element.compareTo(node.element);
+
+        //See if we have found the element.
+        if (compareResult == 0)
+            return true;
+        //See if it is less than current node, go left if so.
+        if (compareResult < 0)
+            return exists(element, node.left);
+        //Not less than or equal to, go to right of node.
+        return exists(element, node.right);
     }
 
     private int height(HvlNode<T> node) {

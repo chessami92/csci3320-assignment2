@@ -8,7 +8,7 @@ public class AvlTree<T extends Comparable<T>> extends HvlTree {
     /*
      * Constructor - Creates an HVL tree with allowed imbalance of 1.
      */
-    AvlTree() {
+    public AvlTree() {
         super(1);
     }
 }
