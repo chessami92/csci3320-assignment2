@@ -54,17 +54,17 @@ public class HvlTree<T extends Comparable<T>> {
         return node;
     }
 
-    private HvlNode<T> remove(T element, HvlNode<T> node){
-        if(node == null)
+    private HvlNode<T> remove(T element, HvlNode<T> node) {
+        if (node == null)
             return node;
 
         int compareResult = element.compareTo(node.element);
 
-        if(compareResult < 0)
+        if (compareResult < 0)
             node.left = remove(element, node.left);
-        else if(compareResult > 0)
-           node.right = remove(element, node.right);
-        else if(node.left != null && node.right !=null){ //Has two children
+        else if (compareResult > 0)
+            node.right = remove(element, node.right);
+        else if (node.left != null && node.right != null) { //Has two children
             node.element = findMin(node.right);
             node.right = remove(node.element, node.right);
         }
@@ -76,8 +76,8 @@ public class HvlTree<T extends Comparable<T>> {
         return node == null ? -1 : node.getHeight();
     }
 
-    private T findMin(HvlNode<T> node){
-        if(node.left == null)
+    private T findMin(HvlNode<T> node) {
+        if (node.left == null)
             return node.element;
         else
             return findMin(node.left);
