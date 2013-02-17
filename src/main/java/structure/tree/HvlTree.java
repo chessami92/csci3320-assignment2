@@ -4,7 +4,7 @@ package structure.tree;
  * Created by: Josh
  * On: 2/16/13 10:09 PM
  */
-public class HvlTree<T extends Comparable<T>> {
+public class HvlTree<T extends Comparable<T>> implements Tree<T>{
     private int allowedImbalance;   //How much imbalance is allowed.
     private HvlNode<T> root;        //The base of the tree.
 
@@ -16,6 +16,19 @@ public class HvlTree<T extends Comparable<T>> {
             this.allowedImbalance = allowedImbalance;
         else
             this.allowedImbalance = 1;
+    }
+
+    /*
+     * Inserts the passed element into the root.
+     */
+    @Override
+    public void insert(T element){
+        insert(element, root);
+    }
+
+    @Override
+    public void remove(T element){
+        remove(element, root);
     }
 
     private HvlNode<T> insert(T element, HvlNode<T> node) {
@@ -49,7 +62,7 @@ public class HvlTree<T extends Comparable<T>> {
                 node = doubleWithRightChild(node);
         }
 
-        node.setHeight(Math.max(height(node.left), height(node.right)) + 1);
+        node.height = Math.max(height(node.left), height(node.right)) + 1;
 
         return node;
     }
@@ -73,7 +86,7 @@ public class HvlTree<T extends Comparable<T>> {
     }
 
     private int height(HvlNode<T> node) {
-        return node == null ? -1 : node.getHeight();
+        return node == null ? -1 : node.height;
     }
 
     private T findMin(HvlNode<T> node) {
@@ -91,8 +104,8 @@ public class HvlTree<T extends Comparable<T>> {
         HvlNode<T> k1 = k2.left;
         k2.left = k1.right;
         k1.right = k2;
-        k2.setHeight(Math.max(height(k2.left), height(k2.right)) + 1);
-        k1.setHeight(Math.max(height(k1.left), k2.getHeight()) + 1);
+        k2.height = Math.max(height(k2.left), height(k2.right)) + 1;
+        k1.height = Math.max(height(k1.left), k2.height) + 1;
         return k1;
     }
 
@@ -104,8 +117,8 @@ public class HvlTree<T extends Comparable<T>> {
         HvlNode<T> k1 = k2.right;
         k2.right = k1.left;
         k1.left = k2;
-        k2.setHeight(Math.max(height(k2.right), height(k2.left)) + 1);
-        k1.setHeight(Math.max(height(k1.right), k2.getHeight()) + 1);
+        k2.height = Math.max(height(k2.right), height(k2.left)) + 1;
+        k1.height = Math.max(height(k1.right), k2.height) + 1;
         return k1;
     }
 
@@ -128,5 +141,4 @@ public class HvlTree<T extends Comparable<T>> {
         k3.right = rotateWithLeftChild(k3.right);
         return rotateWithRightChild(k3);
     }
-
 }
