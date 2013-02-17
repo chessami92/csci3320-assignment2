@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -11,34 +13,35 @@ public class TestEfficiency {
 
     }
 
+    /*
+     * Generates an array of random integers from -length to +length
+     * inclusive, with no repeating values.
+     */
     static int[] randomIntegersNoRepeats(int length) {
-        int[] selectionSet = createIntegerList(-length, length);
+        //Set of valid possible integers
+        List<Integer> selectionSet = createIntegerList(-length, length);
 
         int[] integers = new int[length];
 
         for (int i = length; i > 0; --i) {
-            for(int j = 0; j < selectionSet.length; ++j)
-                System.out.print(selectionSet[j] + " ");
-            System.out.println();
-
-            int numberOfElements = length + i + 1;
-            System.out.println(numberOfElements);
-
-            int randomNumber = random.nextInt(numberOfElements);
-            System.out.println("Random: " + randomNumber);
-            integers[length - i] = selectionSet[randomNumber];
-
-            selectionSet[randomNumber] = selectionSet[numberOfElements - 1];
+            //Selects a random element from the selection set.
+            int nextElement = random.nextInt(selectionSet.size());
+            //Removes the selected element from the next so it isn't used again.
+            integers[length - i] = selectionSet.remove(nextElement);
         }
 
         return integers;
     }
 
-    static int[] createIntegerList(int lowerBound, int upperBound) {
-        int[] list = new int[upperBound - lowerBound + 1];
+    /*
+     * Generates a list of integers between lower bound
+     * and upper bound inclusive.
+     */
+    static List<Integer> createIntegerList(int lowerBound, int upperBound) {
+        LinkedList<Integer> list = new LinkedList<Integer>();
 
         for (int i = lowerBound; i <= upperBound; ++i)
-            list[i - lowerBound] = i;
+            list.add(i);
 
         return list;
     }

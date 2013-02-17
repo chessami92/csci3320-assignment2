@@ -1,5 +1,7 @@
 import org.testng.annotations.Test;
 
+import java.util.List;
+
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
@@ -29,12 +31,12 @@ public class TestEfficiencyTest {
     @Test
     public void createIntegerList() {
         final int length = 10;
-        int[] testIntegers = TestEfficiency.createIntegerList(-length, length);
+        List testIntegers = TestEfficiency.createIntegerList(-length, length);
 
-        assertEquals(testIntegers.length, 2 * length + 1);
+        assertEquals(testIntegers.size(), 2 * length + 1);
 
         for (int i = -length; i <= length; ++i) {
-            assertEquals(testIntegers[i + length], i);
+            assertEquals(testIntegers.get(i+length), i);
         }
     }
 }
