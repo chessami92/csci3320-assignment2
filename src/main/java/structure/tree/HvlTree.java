@@ -4,13 +4,13 @@ package structure.tree;
  * Created by: Josh
  * On: 2/16/13 10:09 PM
  */
-public class HvlNodeModifier<T extends Comparable<T>> {
+public class HvlTree<T extends Comparable<T>> {
     private int allowedImbalance;   //How much imbalance is allowed
 
     /*
      * Constructor - specify the allowed imbalance.
      */
-    HvlNodeModifier(int allowedImbalance) {
+    HvlTree(int allowedImbalance) {
         if (allowedImbalance > 0)
             this.allowedImbalance = allowedImbalance;
         else
