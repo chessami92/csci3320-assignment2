@@ -14,19 +14,23 @@ public class TestEfficiency {
     }
 
     /*
-     * Generates an array of random integers from -length to +length
+     * Generates an array of random integers from lowerBound to upperBound
      * inclusive, with no repeating values.
+     * upperbound - lowerBound + 1 must be greater than length.
      */
-    static int[] randomIntegersNoRepeats(int length) {
+    static int[] randomIntegersNoRepeats(int length, int lowerBound, int upperBound) {
+        if(upperBound - lowerBound + 1 < length)
+            throw new IllegalArgumentException("Cannot create list with no repeating values. Need larger bounds.");
+
         //Set of valid possible integers
-        List<Integer> selectionSet = createIntegerList(-length, length);
+        List<Integer> selectionSet = createIntegerList(lowerBound, upperBound);
 
         int[] integers = new int[length];
 
         for (int i = length; i > 0; --i) {
             //Selects a random element from the selection set.
             int nextElement = random.nextInt(selectionSet.size());
-            //Removes the selected element from the next so it isn't used again.
+            //Remove the selected element from the next so it isn't used again.
             integers[length - i] = selectionSet.remove(nextElement);
         }
 
@@ -34,8 +38,7 @@ public class TestEfficiency {
     }
 
     /*
-     * Generates a list of integers between lower bound
-     * and upper bound inclusive.
+     * Generates a list of integers between lower bound and upper bound inclusive.
      */
     static List<Integer> createIntegerList(int lowerBound, int upperBound) {
         LinkedList<Integer> list = new LinkedList<Integer>();

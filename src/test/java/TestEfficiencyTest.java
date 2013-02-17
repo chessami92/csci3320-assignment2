@@ -2,9 +2,7 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 /**
  * Created by: Josh
@@ -15,7 +13,7 @@ public class TestEfficiencyTest {
     @Test
     public void randomIntegersNoRepeat() {
         final int length = 10;
-        int[] randomIntegers = TestEfficiency.randomIntegersNoRepeats(length);
+        int[] randomIntegers = TestEfficiency.randomIntegersNoRepeats(length, -length, length);
 
         assertEquals(randomIntegers.length, length);
 
@@ -28,6 +26,12 @@ public class TestEfficiencyTest {
         }
     }
 
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void randomIntegersNoRepeat_incorrectBounds() {
+        final int length = 20;
+        TestEfficiency.randomIntegersNoRepeats(length, 2, length);
+    }
+
     @Test
     public void createIntegerList() {
         final int length = 10;
@@ -36,7 +40,7 @@ public class TestEfficiencyTest {
         assertEquals(testIntegers.size(), 2 * length + 1);
 
         for (int i = -length; i <= length; ++i) {
-            assertEquals(testIntegers.get(i+length), i);
+            assertEquals(testIntegers.get(i + length), i);
         }
     }
 }
