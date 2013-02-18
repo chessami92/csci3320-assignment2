@@ -11,4 +11,9 @@ public class AvlTree<T extends Comparable<T>> extends HvlTree {
     public AvlTree() {
         super(1);
     }
+
+    @Override
+    public String getTreeType() {
+        return "AVL";
+    }
 }

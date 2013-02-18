@@ -1,37 +1,65 @@
 import structure.tree.AvlTree;
 import structure.tree.HvlTree;
+import structure.tree.Statistics;
 import structure.tree.Tree;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by: Josh
  * On: 2/16/13 10:55 PM
  */
 public class TestEfficiency {
-    private static Random random = new Random();
+    private static final Random random = new Random();
+    private static final int numTests = 10;
+    private static final int testLength = 1000;
 
     public static void main(String[] args) {
-        final int numTests = 10;
-        final int testLength = 1000;
+        final Tree[] trees = {new AvlTree<Integer>(), new HvlTree<Integer>(10), new HvlTree<Integer>(100)};
+        final Map<String, Statistics> statistics = setupStatistics(trees);
+
         int[] findData = randomIntegersNoRepeats(100, -testLength, testLength);
 
         for (int i = 0; i < numTests; ++i) {
-            int[] testData = randomIntegersNoRepeats(testLength, -testLength, testLength);
-            testTrees(testData, findData);
+            testTrees(trees, findData, statistics);
         }
     }
 
-    private static void testTrees(int[] testData, int[] findData) {
-        Tree[] trees = {new AvlTree<Integer>(), new HvlTree<Integer>(10), new HvlTree<Integer>(100)};
+    /*
+     *
+     */
+    private static void testTrees(Tree<Integer>[] trees, int[] findData, Map<String, Statistics> statistics) {
+        int[] testData = randomIntegersNoRepeats(testLength, -testLength, testLength);
 
         for (Tree<Integer> tree : trees) {
+            tree.clearTree();
             for (int i : testData) {
                 tree.insert(i);
             }
+
+            for (int i : findData){
+                if(tree.exists(i))
+                    statistics.get(tree.getTreeType()).updateSearch(tree.getSearchCount());
+                else
+                    tree.getSearchCount();
+            }
+
+            statistics.get(tree.getTreeType()).updateRotations(tree.getRotations());
+            statistics.get(tree.getTreeType()).updateHeight(tree.getHeight());
         }
+    }
+
+    /*
+     * Creates an entry in the map for each type of tree with a statistics object.
+     */
+    private static Map<String, Statistics> setupStatistics(Tree[] trees) {
+        Map<String, Statistics> statistics = new HashMap<String, Statistics>();
+
+        for (Tree tree : trees) {
+            statistics.put(tree.getTreeType(), new Statistics());
+        }
+
+        return statistics;
     }
 
     /*

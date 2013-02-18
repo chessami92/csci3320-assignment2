@@ -9,6 +9,8 @@ import org.apache.commons.lang.StringUtils;
 public class HvlTree<T extends Comparable<T>> implements Tree<T> {
     private int allowedImbalance;   //How much imbalance is allowed.
     private HvlNode<T> root;        //The base of the tree.
+    private int searchCount;        //How many searches it took to find the element.
+    private int rotations;          //How many rotations have occurred on the tree.
 
     /*
      * Constructor - specify the allowed imbalance.
@@ -36,6 +38,35 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
     @Override
     public boolean exists(T element) {
         return exists(element, root);
+    }
+
+    @Override
+    public int getHeight(){
+        return root.height;
+    }
+
+    @Override
+    public String getTreeType(){
+        return "HVL" + allowedImbalance;
+    }
+
+    @Override
+    public void clearTree(){
+        root = null;
+        searchCount = 0;
+        rotations = 0;
+    }
+
+    @Override
+    public int getSearchCount(){
+        int temp = searchCount;
+        searchCount = 0;
+        return temp;
+    }
+
+    @Override
+    public int getRotations(){
+        return rotations;
     }
 
     @Override
@@ -110,6 +141,8 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
     }
 
     private boolean exists(T element, HvlNode<T> node) {
+        ++searchCount;
+
         //Did not find it - reached a null leaf.
         if (node == null)
             return false;
@@ -142,6 +175,8 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
      * Updates heights, then returns the new root.
      */
     private HvlNode<T> rotateWithLeftChild(HvlNode<T> k2) {
+        ++rotations;
+
         HvlNode<T> k1 = k2.left;
         k2.left = k1.right;
         k1.right = k2;
@@ -155,6 +190,8 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
      * Updates heights, then returns the new root.
      */
     private HvlNode<T> rotateWithRightChild(HvlNode<T> k2) {
+        ++rotations;
+
         HvlNode<T> k1 = k2.right;
         k2.right = k1.left;
         k1.left = k2;
