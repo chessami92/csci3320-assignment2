@@ -1,7 +1,7 @@
 import structure.tree.AvlTree;
+import structure.tree.BinarySearchTree;
 import structure.tree.HvlTree;
 import structure.tree.Statistics;
-import structure.tree.BinarySearchTree;
 
 import java.util.*;
 
@@ -65,7 +65,7 @@ public class TestEfficiency {
      * Method used to consistently create a list of trees.
      */
     private static BinarySearchTree[] createTrees() {
-        return new BinarySearchTree[] {new AvlTree<Integer>(), new HvlTree<Integer>(10), new HvlTree<Integer>(100)};
+        return new BinarySearchTree[]{new AvlTree<Integer>(), new HvlTree<Integer>(10), new HvlTree<Integer>(100)};
     }
 
     /*

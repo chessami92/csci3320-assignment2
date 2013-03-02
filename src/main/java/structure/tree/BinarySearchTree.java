@@ -7,22 +7,26 @@ import org.apache.commons.lang.StringUtils;
  * On: 2/16/13 8:42 PM
  */
 public abstract class BinarySearchTree<T extends Comparable<T>> {
-    public abstract void insert(T element);
-    public abstract void remove(T element);
-    public abstract boolean exists(T element);
-    public abstract int getHeight();
-    public abstract String getTreeType();
-
     private int searchCount;        //How many searches it took to find the element.
     private int rotations;          //How many rotations have occurred on the tree.
 
-    public int getSearchCount(){
+    public abstract void insert(T element);
+
+    public abstract void remove(T element);
+
+    public abstract boolean exists(T element);
+
+    public abstract int getHeight();
+
+    public abstract String getTreeType();
+
+    public int getSearchCount() {
         int temp = searchCount;
         searchCount = 0;
         return temp;
     }
 
-    public int getRotations(){
+    public int getRotations() {
         return rotations;
     }
 

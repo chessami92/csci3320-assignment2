@@ -37,12 +37,12 @@ public class HvlTree<T extends Comparable<T>> extends BinarySearchTree<T> {
     }
 
     @Override
-    public int getHeight(){
+    public int getHeight() {
         return root.height;
     }
 
     @Override
-    public String getTreeType(){
+    public String getTreeType() {
         return "HVL" + allowedImbalance;
     }
 
