@@ -12,7 +12,7 @@ import java.util.*;
 public class TestEfficiency {
     private static final Random random = new Random();
     private static final int numTests = 10;
-    private static final int testLength = 1000;
+    private static final int testLength = 50;
 
     public static void main(String[] args) {
         final Map<String, Statistics> statistics = setupStatistics();
@@ -34,9 +34,10 @@ public class TestEfficiency {
             for (int i : testData) {
                 binarySearchTree.insert(i);
             }
+            System.out.println(binarySearchTree.toString());
 
             for (int i : findData) {
-                if (binarySearchTree.exists(i))
+                if (binarySearchTree.search(i))
                     statistics.get(binarySearchTree.getTreeType()).updateSearch(binarySearchTree.getSearchCount());
                 else
                     binarySearchTree.getSearchCount();

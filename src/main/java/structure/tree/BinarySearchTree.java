@@ -7,18 +7,26 @@ import org.apache.commons.lang.StringUtils;
  * On: 2/16/13 8:42 PM
  */
 public abstract class BinarySearchTree<T extends Comparable<T>> {
-    private int searchCount;        //How many searches it took to find the element.
-    private int rotations;          //How many rotations have occurred on the tree.
+    BinarySearchNode<T> root;        //The base of the tree.
+    int searchCount;        //How many searches it took to find the element.
+    int rotations;          //How many rotations have occurred on the tree.
 
-    public abstract void insert(T element);
-
-    public abstract void remove(T element);
-
-    public abstract boolean exists(T element);
-
-    public abstract int getHeight();
+    public abstract boolean search(T element);
 
     public abstract String getTreeType();
+
+    abstract BinarySearchNode<T> insert(T element, BinarySearchNode<T> node);
+
+    public int getHeight() {
+        return height(root);
+    }
+
+    /*
+     * Inserts the passed element into the root.
+     */
+    public void insert(T element) {
+        root = insert(element, root);
+    }
 
     public int getSearchCount() {
         int temp = searchCount;
@@ -30,27 +38,8 @@ public abstract class BinarySearchTree<T extends Comparable<T>> {
         return rotations;
     }
 
-    int height(BinarySearchNode<T> node) {
-        return node == null ? -1 : node.height;
-    }
-
-    boolean exists(T element, BinarySearchNode<T> node) {
-        ++searchCount;
-
-        //Did not find it - reached a null leaf.
-        if (node == null)
-            return false;
-
-        int compareResult = element.compareTo(node.element);
-
-        //See if we have found the element.
-        if (compareResult == 0)
-            return true;
-        //See if it is less than current node, go left if so.
-        if (compareResult < 0)
-            return exists(element, node.left);
-        //Not less than or equal to, go to right of node.
-        return exists(element, node.right);
+    public String toString() {
+        return toString(root, 0, "---");
     }
 
     String toString(BinarySearchNode<T> node, int prefixTabs, String prefix) {
@@ -63,6 +52,10 @@ public abstract class BinarySearchTree<T extends Comparable<T>> {
         }
 
         return printed.toString();
+    }
+
+    int height(BinarySearchNode<T> node) {
+        return node == null ? -1 : node.height;
     }
 
     /*
