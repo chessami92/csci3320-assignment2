@@ -6,7 +6,7 @@ import org.apache.commons.lang.StringUtils;
  * Created by: Josh
  * On: 2/16/13 8:42 PM
  */
-public abstract class Tree<T extends Comparable<T>> {
+public abstract class BinarySearchTree<T extends Comparable<T>> {
     public abstract void insert(T element);
     public abstract void remove(T element);
     public abstract boolean exists(T element);

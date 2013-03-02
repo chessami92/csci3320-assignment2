@@ -1,12 +1,10 @@
 package structure.tree;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * Created by: Josh
  * On: 2/16/13 10:09 PM
  */
-public class HvlTree<T extends Comparable<T>> extends Tree<T> {
+public class HvlTree<T extends Comparable<T>> extends BinarySearchTree<T> {
     private int allowedImbalance;   //How much imbalance is allowed.
     private BinarySearchNode<T> root;        //The base of the tree.
 
