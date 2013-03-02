@@ -12,7 +12,8 @@ import java.util.*;
 public class TestEfficiency {
     private static final Random random = new Random();
     private static final int numTests = 10;
-    private static final int testLength = 50;
+    private static final int testLength = 1000;
+    private static final int searchLength = 100;
 
     public static void main(String[] args) {
         final Map<String, Statistics> statistics = setupStatistics();
@@ -28,13 +29,12 @@ public class TestEfficiency {
     private static void testTrees(Map<String, Statistics> statistics) {
         final BinarySearchTree[] binarySearchTrees = createTrees();
         final int[] testData = randomIntegersNoRepeats(testLength, -testLength, testLength);
-        final int[] findData = randomIntegersNoRepeats(100, -testLength, testLength);
+        final int[] findData = randomIntegersNoRepeats(searchLength, -testLength, testLength);
 
         for (BinarySearchTree<Integer> binarySearchTree : binarySearchTrees) {
             for (int i : testData) {
                 binarySearchTree.insert(i);
             }
-            System.out.println(binarySearchTree.toString());
 
             for (int i : findData) {
                 if (binarySearchTree.search(i))
@@ -66,7 +66,7 @@ public class TestEfficiency {
      * Method used to consistently create a list of trees.
      */
     private static BinarySearchTree[] createTrees() {
-        return new BinarySearchTree[]{new AvlTree<Integer>(), new HvlTree<Integer>(10), new HvlTree<Integer>(100)};
+        return new BinarySearchTree[]{new AvlTree<Integer>(), new SplayTree(), new HvlTree<Integer>(10), new HvlTree<Integer>(100)};
     }
 
     /*

@@ -11,21 +11,14 @@ public abstract class BinarySearchTree<T extends Comparable<T>> {
     int searchCount;        //How many searches it took to find the element.
     int rotations;          //How many rotations have occurred on the tree.
 
-    public abstract boolean search(T element);
+    public abstract void insert(T element);
 
     public abstract String getTreeType();
 
-    abstract BinarySearchNode<T> insert(T element, BinarySearchNode<T> node);
+    public abstract boolean search(T element);
 
     public int getHeight() {
         return height(root);
-    }
-
-    /*
-     * Inserts the passed element into the root.
-     */
-    public void insert(T element) {
-        root = insert(element, root);
     }
 
     public int getSearchCount() {
@@ -39,7 +32,7 @@ public abstract class BinarySearchTree<T extends Comparable<T>> {
     }
 
     public String toString() {
-        return toString(root, 0, "---");
+        return toString(root, 0, "-- ");
     }
 
     String toString(BinarySearchNode<T> node, int prefixTabs, String prefix) {
@@ -66,10 +59,13 @@ public abstract class BinarySearchTree<T extends Comparable<T>> {
         ++rotations;
 
         BinarySearchNode<T> k1 = k2.left;
+
         k2.left = k1.right;
         k1.right = k2;
+
         k2.height = Math.max(height(k2.left), height(k2.right)) + 1;
         k1.height = Math.max(height(k1.left), k2.height) + 1;
+
         return k1;
     }
 
@@ -81,10 +77,13 @@ public abstract class BinarySearchTree<T extends Comparable<T>> {
         ++rotations;
 
         BinarySearchNode<T> k1 = k2.right;
+
         k2.right = k1.left;
         k1.left = k2;
+
         k2.height = Math.max(height(k2.right), height(k2.left)) + 1;
         k1.height = Math.max(height(k1.right), k2.height) + 1;
+
         return k1;
     }
 
