@@ -15,30 +15,28 @@ public class TestEfficiency {
     private static final int testLength = 1000;
 
     public static void main(String[] args) {
-        final Tree[] trees = {new AvlTree<Integer>(), new HvlTree<Integer>(10), new HvlTree<Integer>(100)};
-        final Map<String, Statistics> statistics = setupStatistics(trees);
-
-        int[] findData = randomIntegersNoRepeats(100, -testLength, testLength);
+        final Map<String, Statistics> statistics = setupStatistics();
 
         for (int i = 0; i < numTests; ++i) {
-            testTrees(trees, findData, statistics);
+            testTrees(statistics);
         }
     }
 
     /*
      *
      */
-    private static void testTrees(Tree<Integer>[] trees, int[] findData, Map<String, Statistics> statistics) {
-        int[] testData = randomIntegersNoRepeats(testLength, -testLength, testLength);
+    private static void testTrees(Map<String, Statistics> statistics) {
+        final Tree[] trees = createTrees();
+        final int[] testData = randomIntegersNoRepeats(testLength, -testLength, testLength);
+        final int[] findData = randomIntegersNoRepeats(100, -testLength, testLength);
 
         for (Tree<Integer> tree : trees) {
-            tree.clearTree();
             for (int i : testData) {
                 tree.insert(i);
             }
 
-            for (int i : findData){
-                if(tree.exists(i))
+            for (int i : findData) {
+                if (tree.exists(i))
                     statistics.get(tree.getTreeType()).updateSearch(tree.getSearchCount());
                 else
                     tree.getSearchCount();
@@ -52,14 +50,22 @@ public class TestEfficiency {
     /*
      * Creates an entry in the map for each type of tree with a statistics object.
      */
-    private static Map<String, Statistics> setupStatistics(Tree[] trees) {
-        Map<String, Statistics> statistics = new HashMap<String, Statistics>();
+    private static Map<String, Statistics> setupStatistics() {
+        final Map<String, Statistics> statistics = new HashMap<String, Statistics>();
+        final Tree[] trees = createTrees();
 
         for (Tree tree : trees) {
             statistics.put(tree.getTreeType(), new Statistics());
         }
 
         return statistics;
+    }
+
+    /*
+     * Method used to consistently create a list of trees.
+     */
+    private static Tree[] createTrees() {
+        return new Tree[] {new AvlTree<Integer>(), new HvlTree<Integer>(10), new HvlTree<Integer>(100)};
     }
 
     /*

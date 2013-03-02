@@ -6,11 +6,9 @@ import org.apache.commons.lang.StringUtils;
  * Created by: Josh
  * On: 2/16/13 10:09 PM
  */
-public class HvlTree<T extends Comparable<T>> implements Tree<T> {
+public class HvlTree<T extends Comparable<T>> extends Tree<T> {
     private int allowedImbalance;   //How much imbalance is allowed.
     private BinarySearchNode<T> root;        //The base of the tree.
-    private int searchCount;        //How many searches it took to find the element.
-    private int rotations;          //How many rotations have occurred on the tree.
 
     /*
      * Constructor - specify the allowed imbalance.
@@ -51,39 +49,8 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
     }
 
     @Override
-    public void clearTree(){
-        root = null;
-        searchCount = 0;
-        rotations = 0;
-    }
-
-    @Override
-    public int getSearchCount(){
-        int temp = searchCount;
-        searchCount = 0;
-        return temp;
-    }
-
-    @Override
-    public int getRotations(){
-        return rotations;
-    }
-
-    @Override
     public String toString() {
         return toString(root, 0, "---");
-    }
-
-    private String toString(BinarySearchNode<T> node, int prefixTabs, String prefix) {
-        StringBuffer printed = new StringBuffer();
-
-        if (node != null) {
-            printed.append(toString(node.right, prefixTabs + 1, "/-- "));
-            printed.append(StringUtils.repeat("    ", prefixTabs)).append(prefix).append(node.element).append("\n");
-            printed.append(toString(node.left, prefixTabs + 1, "\\-- "));
-        }
-
-        return printed.toString();
     }
 
     private BinarySearchNode<T> insert(T element, BinarySearchNode<T> node) {
@@ -140,83 +107,10 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
         return balance(node);
     }
 
-    private boolean exists(T element, BinarySearchNode<T> node) {
-        ++searchCount;
-
-        //Did not find it - reached a null leaf.
-        if (node == null)
-            return false;
-
-        int compareResult = element.compareTo(node.element);
-
-        //See if we have found the element.
-        if (compareResult == 0)
-            return true;
-        //See if it is less than current node, go left if so.
-        if (compareResult < 0)
-            return exists(element, node.left);
-        //Not less than or equal to, go to right of node.
-        return exists(element, node.right);
-    }
-
-    private int height(BinarySearchNode<T> node) {
-        return node == null ? -1 : node.height;
-    }
-
     private T findMin(BinarySearchNode<T> node) {
         if (node.left == null)
             return node.element;
         else
             return findMin(node.left);
-    }
-
-    /*
-     * Rotate binary tree node with a left child.
-     * Updates heights, then returns the new root.
-     */
-    private BinarySearchNode<T> rotateWithLeftChild(BinarySearchNode<T> k2) {
-        ++rotations;
-
-        BinarySearchNode<T> k1 = k2.left;
-        k2.left = k1.right;
-        k1.right = k2;
-        k2.height = Math.max(height(k2.left), height(k2.right)) + 1;
-        k1.height = Math.max(height(k1.left), k2.height) + 1;
-        return k1;
-    }
-
-    /*
-     * Rotate binary tree node with a right child.
-     * Updates heights, then returns the new root.
-     */
-    private BinarySearchNode<T> rotateWithRightChild(BinarySearchNode<T> k2) {
-        ++rotations;
-
-        BinarySearchNode<T> k1 = k2.right;
-        k2.right = k1.left;
-        k1.left = k2;
-        k2.height = Math.max(height(k2.right), height(k2.left)) + 1;
-        k1.height = Math.max(height(k1.right), k2.height) + 1;
-        return k1;
-    }
-
-    /*
-     * Double rotate binary tree node: first left child with its
-     * right child, then node k3 with the new left child.
-     * Updates heights, then returns new root.
-     */
-    private BinarySearchNode<T> doubleWithLeftChild(BinarySearchNode<T> k3) {
-        k3.left = rotateWithRightChild(k3.left);
-        return rotateWithLeftChild(k3);
-    }
-
-    /*
-     * Double rotate binary tree node: first right child with its
-     * left child, then node k3 with the new right child.
-     * Updates heights, then returns new root.
-     */
-    private BinarySearchNode<T> doubleWithRightChild(BinarySearchNode<T> k3) {
-        k3.right = rotateWithLeftChild(k3.right);
-        return rotateWithRightChild(k3);
     }
 }
