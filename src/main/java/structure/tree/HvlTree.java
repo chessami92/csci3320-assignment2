@@ -8,7 +8,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class HvlTree<T extends Comparable<T>> implements Tree<T> {
     private int allowedImbalance;   //How much imbalance is allowed.
-    private HvlNode<T> root;        //The base of the tree.
+    private BinarySearchNode<T> root;        //The base of the tree.
     private int searchCount;        //How many searches it took to find the element.
     private int rotations;          //How many rotations have occurred on the tree.
 
@@ -74,7 +74,7 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
         return toString(root, 0, "---");
     }
 
-    private String toString(HvlNode<T> node, int prefixTabs, String prefix) {
+    private String toString(BinarySearchNode<T> node, int prefixTabs, String prefix) {
         StringBuffer printed = new StringBuffer();
 
         if (node != null) {
@@ -86,9 +86,9 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
         return printed.toString();
     }
 
-    private HvlNode<T> insert(T element, HvlNode<T> node) {
+    private BinarySearchNode<T> insert(T element, BinarySearchNode<T> node) {
         if (node == null)
-            return new HvlNode<T>(element);
+            return new BinarySearchNode<T>(element);
 
         int compareResult = element.compareTo(node.element);
 
@@ -101,7 +101,7 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
         return balance(node);
     }
 
-    private HvlNode<T> balance(HvlNode<T> node) {
+    private BinarySearchNode<T> balance(BinarySearchNode<T> node) {
         if (node == null)
             return node;
 
@@ -122,7 +122,7 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
         return node;
     }
 
-    private HvlNode<T> remove(T element, HvlNode<T> node) {
+    private BinarySearchNode<T> remove(T element, BinarySearchNode<T> node) {
         if (node == null)
             return node;
 
@@ -140,7 +140,7 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
         return balance(node);
     }
 
-    private boolean exists(T element, HvlNode<T> node) {
+    private boolean exists(T element, BinarySearchNode<T> node) {
         ++searchCount;
 
         //Did not find it - reached a null leaf.
@@ -159,11 +159,11 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
         return exists(element, node.right);
     }
 
-    private int height(HvlNode<T> node) {
+    private int height(BinarySearchNode<T> node) {
         return node == null ? -1 : node.height;
     }
 
-    private T findMin(HvlNode<T> node) {
+    private T findMin(BinarySearchNode<T> node) {
         if (node.left == null)
             return node.element;
         else
@@ -174,10 +174,10 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
      * Rotate binary tree node with a left child.
      * Updates heights, then returns the new root.
      */
-    private HvlNode<T> rotateWithLeftChild(HvlNode<T> k2) {
+    private BinarySearchNode<T> rotateWithLeftChild(BinarySearchNode<T> k2) {
         ++rotations;
 
-        HvlNode<T> k1 = k2.left;
+        BinarySearchNode<T> k1 = k2.left;
         k2.left = k1.right;
         k1.right = k2;
         k2.height = Math.max(height(k2.left), height(k2.right)) + 1;
@@ -189,10 +189,10 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
      * Rotate binary tree node with a right child.
      * Updates heights, then returns the new root.
      */
-    private HvlNode<T> rotateWithRightChild(HvlNode<T> k2) {
+    private BinarySearchNode<T> rotateWithRightChild(BinarySearchNode<T> k2) {
         ++rotations;
 
-        HvlNode<T> k1 = k2.right;
+        BinarySearchNode<T> k1 = k2.right;
         k2.right = k1.left;
         k1.left = k2;
         k2.height = Math.max(height(k2.right), height(k2.left)) + 1;
@@ -205,7 +205,7 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
      * right child, then node k3 with the new left child.
      * Updates heights, then returns new root.
      */
-    private HvlNode<T> doubleWithLeftChild(HvlNode<T> k3) {
+    private BinarySearchNode<T> doubleWithLeftChild(BinarySearchNode<T> k3) {
         k3.left = rotateWithRightChild(k3.left);
         return rotateWithLeftChild(k3);
     }
@@ -215,7 +215,7 @@ public class HvlTree<T extends Comparable<T>> implements Tree<T> {
      * left child, then node k3 with the new right child.
      * Updates heights, then returns new root.
      */
-    private HvlNode<T> doubleWithRightChild(HvlNode<T> k3) {
+    private BinarySearchNode<T> doubleWithRightChild(BinarySearchNode<T> k3) {
         k3.right = rotateWithLeftChild(k3.right);
         return rotateWithRightChild(k3);
     }
