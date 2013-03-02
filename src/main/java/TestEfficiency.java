@@ -1,9 +1,8 @@
-import structure.tree.AvlTree;
-import structure.tree.BinarySearchTree;
-import structure.tree.HvlTree;
-import structure.tree.Statistics;
+import structure.tree.*;
 
 import java.util.*;
+
+import static org.apache.commons.lang.StringUtils.rightPad;
 
 /**
  * Created by: Josh
@@ -11,15 +10,40 @@ import java.util.*;
  */
 public class TestEfficiency {
     private static final Random random = new Random();
-    private static final int numTests = 10;
-    private static final int testLength = 50;
+    private static final int NUM_TESTS = 10;
+    private static final int TEST_LENGTH = 1000;
+    private static final int SEARCH_LENGTH = 100;
 
     public static void main(String[] args) {
         final Map<String, Statistics> statistics = setupStatistics();
 
-        for (int i = 0; i < numTests; ++i) {
+        for (int i = 0; i < NUM_TESTS; ++i) {
             testTrees(statistics);
         }
+
+        final int columnWidth = 15;
+
+        System.out.println(rightPad("Tree Type", columnWidth)
+                + rightPad("Max Search", columnWidth)
+                + rightPad("Min Search", columnWidth)
+                + rightPad("Avg Search", columnWidth)
+                + rightPad("Max Rotations", columnWidth)
+                + rightPad("Min Rotations", columnWidth)
+                + rightPad("Avg Rotations", columnWidth)
+                + rightPad("Avg Height", columnWidth));
+        for (BinarySearchTree tree : createTrees()) {
+            String treeType = tree.getTreeType();
+            Statistics treeStatistics = statistics.get(treeType);
+            System.out.println(rightPad(treeType, columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getMaxSearch()), columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getMinSearch()), columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getAverageSearch()), columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getMaxRotations()), columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getMinRotations()), columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getAverageRotations()), columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getAverageHeight()), columnWidth));
+        }
+
     }
 
     /*
@@ -27,24 +51,22 @@ public class TestEfficiency {
      */
     private static void testTrees(Map<String, Statistics> statistics) {
         final BinarySearchTree[] binarySearchTrees = createTrees();
-        final int[] testData = randomIntegersNoRepeats(testLength, -testLength, testLength);
-        final int[] findData = randomIntegersNoRepeats(100, -testLength, testLength);
+        final int[] testData = randomIntegersNoRepeats(TEST_LENGTH, -TEST_LENGTH, TEST_LENGTH);
+        final int[] findData = randomIntegersNoRepeats(SEARCH_LENGTH, -TEST_LENGTH, TEST_LENGTH);
 
         for (BinarySearchTree<Integer> binarySearchTree : binarySearchTrees) {
+            Statistics treeStatistics = statistics.get(binarySearchTree.getTreeType());
             for (int i : testData) {
                 binarySearchTree.insert(i);
             }
-            System.out.println(binarySearchTree.toString());
 
             for (int i : findData) {
-                if (binarySearchTree.search(i))
-                    statistics.get(binarySearchTree.getTreeType()).updateSearch(binarySearchTree.getSearchCount());
-                else
-                    binarySearchTree.getSearchCount();
+                binarySearchTree.search(i);
+                treeStatistics.updateSearch(binarySearchTree.getSearchCount());
             }
 
-            statistics.get(binarySearchTree.getTreeType()).updateRotations(binarySearchTree.getRotations());
-            statistics.get(binarySearchTree.getTreeType()).updateHeight(binarySearchTree.getHeight());
+            treeStatistics.updateRotations(binarySearchTree.getRotations());
+            treeStatistics.updateHeight(binarySearchTree.getHeight());
         }
     }
 
@@ -66,7 +88,7 @@ public class TestEfficiency {
      * Method used to consistently create a list of trees.
      */
     private static BinarySearchTree[] createTrees() {
-        return new BinarySearchTree[]{new AvlTree<Integer>(), new HvlTree<Integer>(10), new HvlTree<Integer>(100)};
+        return new BinarySearchTree[]{new AvlTree<Integer>(), new SplayTree(), new HvlTree<Integer>(10), new HvlTree<Integer>(100)};
     }
 
     /*

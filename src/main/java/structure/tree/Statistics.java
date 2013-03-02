@@ -7,10 +7,14 @@ package structure.tree;
 public class Statistics {
     private int maxSearch = -1, minSearch = -1;
     private int maxRotations = -1, minRotations = -1;
+    private int totalSearch = 0, searchSamples = 0;
     private int totalRotations = 0, rotationSamples = 0;
     private int totalHeight = 0, heightSamples = 0;
 
     public void updateSearch(int searchCount) {
+        totalSearch += searchCount;
+        ++searchSamples;
+
         if (maxSearch == -1) {
             maxSearch = searchCount;
             minSearch = searchCount;
@@ -26,6 +30,10 @@ public class Statistics {
 
     public int getMinSearch() {
         return minSearch;
+    }
+
+    public int getAverageSearch(){
+        return totalSearch / searchSamples;
     }
 
     public void updateRotations(int rotationCount) {

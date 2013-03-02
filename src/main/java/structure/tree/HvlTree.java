@@ -46,7 +46,14 @@ public class HvlTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         return search(element, node.right);
     }
 
+    /*
+     * Inserts the passed element into the root.
+     */
     @Override
+    public void insert(T element) {
+        root = insert(element, root);
+    }
+
     BinarySearchNode<T> insert(T element, BinarySearchNode<T> node) {
         if (node == null)
             return new BinarySearchNode<T>(element);
