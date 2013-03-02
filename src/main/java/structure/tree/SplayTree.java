@@ -107,7 +107,7 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         }
     }
 
-    private void finalSplay() {
+    void finalSplay() {
         //Check if one last rotation is needed to bring the node to the root.
         switch (path) {
             case LEFT:

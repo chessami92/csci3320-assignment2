@@ -88,7 +88,7 @@ public class TestEfficiency {
      * Method used to consistently create a list of trees.
      */
     private static BinarySearchTree[] createTrees() {
-        return new BinarySearchTree[]{new AvlTree<Integer>(), new SplayTree(), new HvlTree<Integer>(10), new HvlTree<Integer>(100)};
+        return new BinarySearchTree[]{new AvlTree<Integer>(), new SplayTree(), new HvlTree<Integer>(10), new HvlTree<Integer>(100), new HybridTree()};
     }
 
     /*
