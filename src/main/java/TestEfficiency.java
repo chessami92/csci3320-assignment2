@@ -1,9 +1,8 @@
-import structure.tree.AvlTree;
-import structure.tree.BinarySearchTree;
-import structure.tree.HvlTree;
-import structure.tree.Statistics;
+import structure.tree.*;
 
 import java.util.*;
+
+import static org.apache.commons.lang.StringUtils.rightPad;
 
 /**
  * Created by: Josh
@@ -21,6 +20,28 @@ public class TestEfficiency {
         for (int i = 0; i < numTests; ++i) {
             testTrees(statistics);
         }
+
+        final int columnWidth = 15;
+
+        System.out.println(rightPad("Tree Type", columnWidth)
+                + rightPad("Max Search", columnWidth)
+                + rightPad("Min Search", columnWidth)
+                + rightPad("Max Rotations", columnWidth)
+                + rightPad("Min Rotations", columnWidth)
+                + rightPad("Avg Rotations", columnWidth)
+                + rightPad("Avg Height", columnWidth));
+        for (BinarySearchTree tree : createTrees()) {
+            String treeType = tree.getTreeType();
+            Statistics treeStatistics = statistics.get(treeType);
+            System.out.println(rightPad(treeType, columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getMaxSearch()), columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getMinSearch()), columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getMaxRotations()), columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getMinRotations()), columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getAverageRotations()), columnWidth)
+                    + rightPad(String.valueOf(treeStatistics.getAverageHeight()), columnWidth));
+        }
+
     }
 
     /*
