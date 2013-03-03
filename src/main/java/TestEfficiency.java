@@ -1,4 +1,5 @@
 import structure.tree.*;
+import structure.tree.util.Statistics;
 
 import java.util.*;
 
@@ -62,7 +63,7 @@ public class TestEfficiency {
 
             for (int i : findData) {
                 binarySearchTree.search(i);
-                treeStatistics.updateSearch(binarySearchTree.getSearchCount());
+                treeStatistics.updateSearch(binarySearchTree.getSearchSteps());
             }
 
             treeStatistics.updateRotations(binarySearchTree.getRotations());

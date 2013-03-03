@@ -1,10 +1,12 @@
 package structure.tree;
 
+import static structure.tree.BinarySearchTreeUtils.*;
+
 /**
  * Created by: Josh
  * On: 3/2/13 10:49 AM
  */
-public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
+public class SplayTree<T extends Comparable<T>> implements BinarySearchTree<T> {
     private static final int NO_PATH = -1;
     private static final int LEFT = 0;
     private static final int RIGHT = 1;
@@ -14,9 +16,14 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
     private static final int RIGHT_RIGHT = 5;
     private int path = NO_PATH;
 
+    BinarySearchNode<T> root;
+    private int searchSteps;
+    int rotations;
+
     @Override
-    public String getTreeType() {
-        return "Splay";
+    public void insert(T element) {
+        root = insert(element, root);
+        finalSplay();
     }
 
     @Override
@@ -30,12 +37,29 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         }
     }
 
-    public void insert(T element) {
-        root = insert(element, root);
-        finalSplay();
+    @Override
+    public int getHeight() {
+        return height(root);
     }
 
-    BinarySearchNode<T> insert(T element, BinarySearchNode<T> node) {
+    @Override
+    public int getSearchSteps() {
+        int temp = searchSteps;
+        searchSteps = 0;
+        return temp;
+    }
+
+    @Override
+    public int getRotations() {
+        return rotations;
+    }
+
+    @Override
+    public String getTreeType() {
+        return "Splay";
+    }
+
+    private BinarySearchNode<T> insert(T element, BinarySearchNode<T> node) {
         if (node == null)
             return new BinarySearchNode<T>(element);
 
@@ -52,8 +76,8 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         }
     }
 
-    BinarySearchNode<T> search(T element, BinarySearchNode<T> node) throws NoSuchFieldError {
-        ++searchCount;
+    private BinarySearchNode<T> search(T element, BinarySearchNode<T> node) throws NoSuchFieldError {
+        ++searchSteps;
 
         if (node == null)
             throw new NoSuchFieldError("Cannot find " + element);
@@ -90,7 +114,8 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         }
 
         //Since the first switch did not return, we have two steps since the node to splay.
-        //Splay the node according to the path.
+        //Splay the node according to the path. Two rotations will always be done in this step.
+        rotations += 2;
         switch (path) {
             case LEFT_LEFT:
                 path = NO_PATH;
@@ -111,48 +136,14 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
         //Check if one last rotation is needed to bring the node to the root.
         switch (path) {
             case LEFT:
+                ++rotations;
                 root = rotateWithLeftChild(root);
                 break;
             case RIGHT:
+                ++rotations;
                 root = rotateWithRightChild(root);
                 break;
         }
         path = NO_PATH;
-    }
-
-    private BinarySearchNode<T> zigZigWithLeftChild(BinarySearchNode<T> g) {
-        rotations += 2;
-
-        BinarySearchNode<T> p = g.left;
-        BinarySearchNode<T> x = p.left;
-
-        g.left = p.right;
-        p.left = x.right;
-        p.right = g;
-        x.right = p;
-
-        g.height = Math.max(height(g.right), height(g.left)) + 1;
-        p.height = Math.max(height(p.right), height(p.left)) + 1;
-        x.height = Math.max(height(x.right), height(x.left)) + 1;
-
-        return x;
-    }
-
-    private BinarySearchNode<T> zigZigWithRightChild(BinarySearchNode<T> g) {
-        rotations += 2;
-
-        BinarySearchNode<T> p = g.right;
-        BinarySearchNode<T> x = p.right;
-
-        g.right = p.left;
-        p.right = x.left;
-        p.left = g;
-        x.left = p;
-
-        g.height = Math.max(height(g.right), height(g.left)) + 1;
-        p.height = Math.max(height(p.right), height(p.left)) + 1;
-        x.height = Math.max(height(x.right), height(x.left)) + 1;
-
-        return x;
     }
 }

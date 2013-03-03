@@ -1,4 +1,4 @@
-package structure.tree;
+package structure.tree.util;
 
 /**
  * Created by: Josh
