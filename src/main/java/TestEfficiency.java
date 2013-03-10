@@ -1,4 +1,5 @@
 import structure.tree.*;
+import structure.tree.util.Statistics;
 
 import java.util.*;
 
