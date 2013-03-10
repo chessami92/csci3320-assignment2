@@ -71,7 +71,6 @@ public class TestEfficiency {
 
             for (int i : findData) {
                 binarySearchTree.search(i);
-                treeStatistics.updateSearch(binarySearchTree.getSearchCount());
                 //Splay and Hybrid trees may update their height every search, so the statistics must be updated.
                 treeStatistics.updateHeight(binarySearchTree.getHeight());
                 //Update statistics with how many steps it took to search for the integer.
