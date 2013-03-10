@@ -5,6 +5,7 @@ package structure.tree.util;
  * On: 2/17/13 5:36 PM
  */
 public class Statistics {
+    //Used for keeping track of tree performance.
     private int maxSearch = -1, minSearch = -1;
     private int maxRotations = -1, minRotations = -1;
     private int totalSearch = 0, searchSamples = 0;
@@ -12,9 +13,11 @@ public class Statistics {
     private int totalHeight = 0, heightSamples = 0;
 
     public void updateSearch(int searchCount) {
+        //Add the search count into the running total.
         totalSearch += searchCount;
         ++searchSamples;
 
+        //Set the min and max search counts as necessary. Starts out at -1, so always replace at beginning.
         if (maxSearch == -1) {
             maxSearch = searchCount;
             minSearch = searchCount;
@@ -33,10 +36,19 @@ public class Statistics {
     }
 
     public int getAverageSearch(){
+        //Check to avoid divide by 0 error.
+        if(searchSamples == 0)
+            throw new IllegalStateException("Must update search before average search available.");
+
         return totalSearch / searchSamples;
     }
 
     public void updateRotations(int rotationCount) {
+        //Add the rotation count into the running total.
+        totalRotations += rotationCount;
+        ++rotationSamples;
+
+        //Set the min and max rotation counts as necessary. Starts out at -1, so always replace at beginning.
         if (maxRotations == -1) {
             maxRotations = rotationCount;
             minRotations = rotationCount;
@@ -44,9 +56,6 @@ public class Statistics {
             maxRotations = rotationCount;
         else if (rotationCount < minRotations)
             minRotations = rotationCount;
-
-        totalRotations += rotationCount;
-        ++rotationSamples;
     }
 
     public int getMaxRotations() {
@@ -58,6 +67,7 @@ public class Statistics {
     }
 
     public int getAverageRotations() {
+        //Check to avoid divide by 0 error.
         if(rotationSamples == 0)
             throw new IllegalStateException("Must update rotations before average rotation available.");
 
@@ -65,11 +75,13 @@ public class Statistics {
     }
 
     public void updateHeight (int height){
+        //Add the height into the running total.
         totalHeight += height;
         ++heightSamples;
     }
 
     public int getAverageHeight(){
+        //Check to avoid divide by 0 error.
         if(heightSamples == 0)
             throw new IllegalStateException("Must update rotations before average rotation available.");
 

@@ -7,6 +7,7 @@ import static structure.tree.BinarySearchTreeUtils.*;
  * On: 3/2/13 10:49 AM
  */
 public class SplayTree<T extends Comparable<T>> implements BinarySearchTree<T> {
+    //Used to keep track of path while ascending the tree after inserting or searching.
     private static final int NO_PATH = -1;
     private static final int LEFT = 0;
     private static final int RIGHT = 1;
@@ -16,16 +17,25 @@ public class SplayTree<T extends Comparable<T>> implements BinarySearchTree<T> {
     private static final int RIGHT_RIGHT = 5;
     private int path = NO_PATH;
 
-    BinarySearchNode<T> root;
-    private int searchSteps;
-    int rotations;
+    BinarySearchNode<T> root;   //The base of the binary tree.
+    private int searchSteps;    //How many steps the current search has taken.
+    int rotations;              //How many rotations have occurred on the tree.
 
+    /*
+     * Inserts the passed element into the root and splays it to the top.
+     * Make sure that it is not one away from the top by calling finalSplay.
+     */
     @Override
     public void insert(T element) {
         root = insert(element, root);
         finalSplay();
     }
 
+    /*
+     * Search for the passed element and splays it to the top.
+     * Make sure that it is not one away from the top by calling finalSplay.
+     * A NoSuchFieldError is thrown when the item is not in the tree - interpret as false.
+     */
     @Override
     public boolean search(T element) {
         try {
@@ -37,11 +47,18 @@ public class SplayTree<T extends Comparable<T>> implements BinarySearchTree<T> {
         }
     }
 
+    /*
+     * Return the height of the root.
+     */
     @Override
     public int getHeight() {
         return height(root);
     }
 
+    /*
+     * Return the number of steps it took to search.
+     * Clear the search counter to set up for the next search.
+     */
     @Override
     public int getSearchSteps() {
         int temp = searchSteps;
@@ -49,6 +66,9 @@ public class SplayTree<T extends Comparable<T>> implements BinarySearchTree<T> {
         return temp;
     }
 
+    /*
+     * Return the number of rotations performed on the tree.
+     */
     @Override
     public int getRotations() {
         return rotations;
@@ -59,7 +79,12 @@ public class SplayTree<T extends Comparable<T>> implements BinarySearchTree<T> {
         return "Splay";
     }
 
+    /*
+     * Recursively attempt to insert the element. Once inserted, splay it to the top.
+     * Keep track of splay path using the updatePathAndSplay method.
+     */
     private BinarySearchNode<T> insert(T element, BinarySearchNode<T> node) {
+        //If node is null, can be inserted.
         if (node == null)
             return new BinarySearchNode<T>(element);
 
@@ -76,6 +101,11 @@ public class SplayTree<T extends Comparable<T>> implements BinarySearchTree<T> {
         }
     }
 
+    /*
+     * Recursively attempt to find the element. Once found, splay it to the top.
+     * Keep track of splay path using the updatePathAndSplay method.
+     * If the element cannot be found, a NoSuchFieldError is thrown to avoid splaying a null node to the top.
+     */
     private BinarySearchNode<T> search(T element, BinarySearchNode<T> node) throws NoSuchFieldError {
         ++searchSteps;
 
@@ -132,6 +162,9 @@ public class SplayTree<T extends Comparable<T>> implements BinarySearchTree<T> {
         }
     }
 
+    /*
+     * Performed once the root the splay gets to the root case one final rotation is needed.
+     */
     void finalSplay() {
         //Check if one last rotation is needed to bring the node to the root.
         switch (path) {

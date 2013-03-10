@@ -1,37 +1,16 @@
 package structure.tree;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * Created by: Josh
  * On: 3/2/13 4:11 PM
  */
 public class BinarySearchTreeUtils {
 
-    public static void main(String[] args) {
-        BinarySearchNode<Integer> root = new BinarySearchNode<Integer>(1);
-        root.left = new BinarySearchNode<Integer>(0);
-        root.right = new BinarySearchNode<Integer>(2);
-        System.out.println(toString(root, 0, "-- "));
-
-        root = rotateWithLeftChild(root);
-        System.out.println(toString(root, 0, "-- "));
-    }
-
+    /*
+     * Return the node's height, unless it is null, then return -1.
+     */
     public static int height(BinarySearchNode node) {
         return node == null ? -1 : node.height;
-    }
-
-    public static String toString(BinarySearchNode node, int prefixTabs, String prefix) {
-        StringBuffer printed = new StringBuffer();
-
-        if (node != null) {
-            printed.append(toString(node.right, prefixTabs + 1, "/-- "));
-            printed.append(StringUtils.repeat("    ", prefixTabs)).append(prefix).append(node.element).append("\n");
-            printed.append(toString(node.left, prefixTabs + 1, "\\-- "));
-        }
-
-        return printed.toString();
     }
 
     /*
@@ -41,9 +20,11 @@ public class BinarySearchTreeUtils {
     public static BinarySearchNode rotateWithLeftChild(BinarySearchNode k2) {
         BinarySearchNode k1 = k2.left;
 
+        //Perform the rotation.
         k2.left = k1.right;
         k1.right = k2;
 
+        //Calculate new heights.
         k2.height = Math.max(height(k2.left), height(k2.right)) + 1;
         k1.height = Math.max(height(k1.left), k2.height) + 1;
 
@@ -57,9 +38,11 @@ public class BinarySearchTreeUtils {
     public static BinarySearchNode rotateWithRightChild(BinarySearchNode k2) {
         BinarySearchNode k1 = k2.right;
 
+        //Perform the rotation.
         k2.right = k1.left;
         k1.left = k2;
 
+        //Calculate new heights.
         k2.height = Math.max(height(k2.right), height(k2.left)) + 1;
         k1.height = Math.max(height(k1.right), k2.height) + 1;
 
@@ -86,15 +69,22 @@ public class BinarySearchTreeUtils {
         return rotateWithRightChild(k3);
     }
 
+    /*
+     * Rotates the grandparent, parent, child relationship so that the grandchild
+     * is now the grandparent.
+     * Updates heights, then returns the new root - the grandchild on the left-left side.
+     */
     public static BinarySearchNode zigZigWithLeftChild(BinarySearchNode g) {
         BinarySearchNode p = g.left;
         BinarySearchNode x = p.left;
 
+        //Perform the rotation.
         g.left = p.right;
         p.left = x.right;
         p.right = g;
         x.right = p;
 
+        //Calculate new heights.
         g.height = Math.max(height(g.right), height(g.left)) + 1;
         p.height = Math.max(height(p.right), height(p.left)) + 1;
         x.height = Math.max(height(x.right), height(x.left)) + 1;
@@ -102,15 +92,22 @@ public class BinarySearchTreeUtils {
         return x;
     }
 
+    /*
+     * Rotates the grandparent, parent, child relationship so that the grandchild
+     * is now the grandparent.
+     * Updates heights, then returns the new root - the grandchild on the right-right side.
+     */
     public static BinarySearchNode zigZigWithRightChild(BinarySearchNode g) {
         BinarySearchNode p = g.right;
         BinarySearchNode x = p.right;
 
+        //Perform the rotation.
         g.right = p.left;
         p.right = x.left;
         p.left = g;
         x.left = p;
 
+        //Calculate new heights.
         g.height = Math.max(height(g.right), height(g.left)) + 1;
         p.height = Math.max(height(p.right), height(p.left)) + 1;
         x.height = Math.max(height(x.right), height(x.left)) + 1;
