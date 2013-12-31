@@ -7,10 +7,10 @@ import static structure.tree.BinarySearchTreeUtils.*;
  * On: 2/16/13 10:09 PM
  */
 public class HvlTree<T extends Comparable<T>> implements BinarySearchTree<T> {
-    private BinarySearchNode<T> root;
-    private int searchSteps;
-    private int rotations;
-    private int allowedImbalance;   //How much imbalance is allowed.
+    private BinarySearchNode<T> root;   //The base of the binary tree.
+    private int searchSteps;            //How many steps the current search has taken.
+    private int rotations;              //How many rotations have occurred on the tree.
+    private int allowedImbalance;       //How much imbalance is allowed.
 
     /*
      * Constructor - specify the allowed imbalance.
@@ -29,16 +29,26 @@ public class HvlTree<T extends Comparable<T>> implements BinarySearchTree<T> {
         root = insert(element, root);
     }
 
+    /*
+     * Searched for the passed element.
+     */
     @Override
     public boolean search(T element) {
         return search(element, root);
     }
 
+    /*
+     * Return the height of the root.
+     */
     @Override
     public int getHeight() {
         return height(root);
     }
 
+    /*
+     * Return the number of steps it took to search.
+     * Clear the search counter to set up for the next search.
+     */
     @Override
     public int getSearchSteps() {
         int temp = searchSteps;
@@ -46,6 +56,9 @@ public class HvlTree<T extends Comparable<T>> implements BinarySearchTree<T> {
         return temp;
     }
 
+    /*
+     * Return the number of rotations performed on the tree.
+     */
     @Override
     public int getRotations() {
         return rotations;
@@ -56,7 +69,9 @@ public class HvlTree<T extends Comparable<T>> implements BinarySearchTree<T> {
         return "HVL" + allowedImbalance;
     }
 
-
+    /*
+     * Recursively attempt to find the element. Return true if found and false if not found.
+     */
     private boolean search(T element, BinarySearchNode<T> node) {
         ++searchSteps;
 
@@ -76,7 +91,11 @@ public class HvlTree<T extends Comparable<T>> implements BinarySearchTree<T> {
         return search(element, node.right);
     }
 
+    /*
+     * Recursively attempt to insert the element. Balances the tree on the inserted path.
+     */
     private BinarySearchNode<T> insert(T element, BinarySearchNode<T> node) {
+        //If node is null, can be inserted.
         if (node == null)
             return new BinarySearchNode<T>(element);
 
@@ -91,11 +110,17 @@ public class HvlTree<T extends Comparable<T>> implements BinarySearchTree<T> {
         return balance(node);
     }
 
+    /*
+     * Balance the tree and keep track of the number of rotations performed on the tree.
+     * Calculate the new height and return the node.
+     */
     private BinarySearchNode<T> balance(BinarySearchNode<T> node) {
+        //Node is null, nothing to balance.
         if (node == null)
             return node;
 
         if (height(node.left) - height(node.right) > allowedImbalance) {
+            //Left child is too tall. Perform appropriate rotation to correct imbalance.
             if (height(node.left.left) >= height(node.left.right)) {
                 ++rotations;
                 node = rotateWithLeftChild(node);
@@ -104,6 +129,7 @@ public class HvlTree<T extends Comparable<T>> implements BinarySearchTree<T> {
                 node = doubleWithLeftChild(node);
             }
         } else if (height(node.right) - height(node.left) > allowedImbalance) {
+            //Right child is too tall. Perform appropriate rotation to correct imbalance.
             if (height(node.right.right) >= height(node.right.left)) {
                 ++rotations;
                 node = rotateWithRightChild(node);
@@ -113,6 +139,7 @@ public class HvlTree<T extends Comparable<T>> implements BinarySearchTree<T> {
             }
         }
 
+        //Calculate the height.
         node.height = Math.max(height(node.left), height(node.right)) + 1;
 
         return node;

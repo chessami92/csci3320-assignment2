@@ -5,10 +5,10 @@ package structure.tree;
  * On: 2/16/13 8:40 PM
  */
 public class BinarySearchNode<T extends Comparable<T>> {
-    T element;              //The data for the node.
-    BinarySearchNode<T> left;                //Left child.
-    BinarySearchNode<T> right;               //Right child.
-    int height;             //Height of the tree
+    T element;                  //The data for the node.
+    BinarySearchNode<T> left;   //Left child.
+    BinarySearchNode<T> right;  //Right child.
+    int height;                 //Height of the node.
 
     /*
      * Constructors - can specify children or not.
